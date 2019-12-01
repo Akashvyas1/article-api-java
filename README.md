@@ -55,13 +55,13 @@ Following would be required to run this api on a system.
 
 - Postgresql (optional)
 
-While using postgresql is recommended, if you don't have postgresql installed on your system, it is possible to run the api without that using h2 in-memory database.
+While using postgresql is recommended, if you don't have postgresql installed on your system, it is possible to run the api without that using h2 in-memory database. However, with h2 db, persisted data would get lost when the application is stopped.
 
 ## How to run the application?
 
 - Clone/download the repository and ensured above prerequisites are taken care of.
 - Before running the application, check the configurations and postgresql database connection and credentials meet your local setup. You can find them and update if required in application.properties file in src/main/resources directory.
-- If you don't have postgresql, then ignore those credentials.
+- If you don't have postgresql, then ignore those credentials as instead h2 in-memory db properties would be used as per application-h2.properties file.
 - Now, to run the application, execute following maven command in project directory:
 
         mvn spring-boot:run
