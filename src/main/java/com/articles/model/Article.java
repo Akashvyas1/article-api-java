@@ -23,9 +23,9 @@ public class Article {
     private Date createdDate;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="article_tag",
-    joinColumns = { @JoinColumn(name="article_id")},
-    inverseJoinColumns = { @JoinColumn(name="tag_name")})
+    @JoinTable(name = "article_tag",
+            joinColumns = {@JoinColumn(name = "article_id")},
+            inverseJoinColumns = {@JoinColumn(name = "tag_name")})
     private Set<Tag> tags = new HashSet<>();
 
     public Article() {

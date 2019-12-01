@@ -4,7 +4,6 @@ import com.articles.ArticlesAPIApplication;
 import com.articles.dao.ArticleDao;
 import com.articles.model.Article;
 import com.articles.model.Tag;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -15,7 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -30,12 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = ArticlesAPIApplication.class)
 @AutoConfigureMockMvc
 public class ArticleTagSearchControllerTest {
-
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     @Autowired
     private MockMvc mvc;
@@ -65,8 +57,8 @@ public class ArticleTagSearchControllerTest {
         Tag body = new Tag("body");
         tags2.add(body);
 
-        Article article1 = new Article("1", "title1", new Date(),"body1", tags1);
-        Article article2 = new Article("2", "title2", new Date(),"body2", tags2);
+        Article article1 = new Article("1", "title1", new Date(), "body1", tags1);
+        Article article2 = new Article("2", "title2", new Date(), "body2", tags2);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article1);

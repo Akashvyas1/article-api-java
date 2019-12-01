@@ -13,13 +13,12 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @GetMapping(path="/_health")
-    public String checkStatus()
-    {
+    @GetMapping(path = "/_health")
+    public String checkStatus() {
         return "Normal";
     }
 
-    @GetMapping(path="/{id}", produces = "application/json")
+    @GetMapping(path = "/{id}", produces = "application/json")
     public ArticleDTO getArticle(@PathVariable("id") String id) {
         return articleService.getArticle(id);
     }

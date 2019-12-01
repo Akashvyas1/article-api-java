@@ -4,7 +4,6 @@ import com.articles.ArticlesAPIApplication;
 import com.articles.dao.ArticleDao;
 import com.articles.model.Article;
 import com.articles.model.Tag;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -31,10 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = ArticlesAPIApplication.class)
 @AutoConfigureMockMvc
 public class ArticleControllerTest {
-
-    @Before
-    public void setUp() throws Exception {
-    }
 
     @Autowired
     private MockMvc mvc;
@@ -64,7 +59,7 @@ public class ArticleControllerTest {
     }
 
     @Test
-    public void testPostArticleBadRequestForMissingDate() throws Exception {
+    public void testPostArticle_shouldReturnBadRequestStatusForMissingDate() throws Exception {
 
         String jsonArticle = "{\n" +
                 "  \"id\": \"1\",\n" +
@@ -82,8 +77,9 @@ public class ArticleControllerTest {
     public void testGetArticle() throws Exception {
         Set<Tag> tags = new HashSet<>();
         tags.add(new Tag("health"));
-        Article article = new Article("1", "title1", new Date(),"body", tags);
+        Article article = new Article("1", "title1", new Date(), "body", tags);
         Mockito.when(articleDao.findById("1")).thenReturn(Optional.of(article));
+
         mvc.perform(get("/articles/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title", is("title1")))

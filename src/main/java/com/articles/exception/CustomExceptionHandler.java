@@ -14,10 +14,9 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({"unchecked", "rawtypes"})
 @ControllerAdvice
-public class CustomExceptionHandler
-{   
+public class CustomExceptionHandler {
     @ExceptionHandler(ServletRequestBindingException.class)
     public final ResponseEntity<Object> handleHeaderException(Exception ex, WebRequest request) {
         List<String> details = new ArrayList<>();
@@ -29,15 +28,15 @@ public class CustomExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleValidationExceptions(
-    MethodArgumentNotValidException ex) {
-    List<String> details = new ArrayList<>();
-    ex.getBindingResult().getAllErrors().forEach((error) -> {
-        String fieldName = ((FieldError) error).getField();
-        String errorMessage = error.getDefaultMessage();
-        details.add(fieldName + " " + errorMessage);
-    });
-    ErrorResponse errorResponse = new ErrorResponse("Client Error", details);
-    return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
+            MethodArgumentNotValidException ex) {
+        List<String> details = new ArrayList<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            details.add(fieldName + " " + errorMessage);
+        });
+        ErrorResponse errorResponse = new ErrorResponse("Client Error", details);
+        return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -58,7 +57,7 @@ public class CustomExceptionHandler
         ErrorResponse error = new ErrorResponse("Client Error", details);
         return new ResponseEntity(error, ex.getHttpStatus());
     }
-    
+
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
         List<String> details = new ArrayList<>();

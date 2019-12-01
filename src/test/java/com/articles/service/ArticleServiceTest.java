@@ -37,7 +37,7 @@ public class ArticleServiceTest {
     @Test
     public void shouldPersistArticle() {
         String[] tags = {"health", "science"};
-        ArticleDTO articleDTO = new ArticleDTO("1", "title","2019-11-30","body",
+        ArticleDTO articleDTO = new ArticleDTO("1", "title", "2019-11-30", "body",
                 new HashSet<>(Arrays.asList(tags)));
         articleService.postArticle(articleDTO);
         Mockito.verify(articleDao).save(any());
@@ -46,20 +46,25 @@ public class ArticleServiceTest {
     @Test(expected = InvalidClientRequestException.class)
     public void shouldThrowExceptionForInvalidDateFormat() {
         String[] tags = {"health", "science"};
-        ArticleDTO articleDTO = new ArticleDTO("1", "title","2019-11","body",
+        ArticleDTO articleDTO = new ArticleDTO("1", "title", "2019-11", "body",
                 new HashSet<>(Arrays.asList(tags)));
         articleService.postArticle(articleDTO);
     }
 
     @Test
     public void shouldGetArticle() {
+        // GIVEN (Mocks)
         Set<Tag> tags = new HashSet<>();
         tags.add(new Tag("health"));
         tags.add(new Tag("science"));
         Date date = new Date();
-        Article article = new Article("1", "title1", date,"body", tags);
+        Article article = new Article("1", "title1", date, "body", tags);
         Mockito.when(articleDao.findById("1")).thenReturn(Optional.of(article));
+
+        // WHEN
         ArticleDTO articleDTO = articleService.getArticle("1");
+
+        // THEN
         assertEquals("title1", articleDTO.getTitle());
         Format formatter = new SimpleDateFormat("yyyy-MM-dd");
         assertEquals(formatter.format(date), articleDTO.getDate());

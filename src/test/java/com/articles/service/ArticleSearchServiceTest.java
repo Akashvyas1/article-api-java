@@ -28,6 +28,7 @@ public class ArticleSearchServiceTest {
 
     @Test
     public void searchArticlesByTagAndDate() {
+        // GIVEN (Mocks)
         Set<Tag> tags1 = new HashSet<>();
         final Tag health = new Tag("health");
         tags1.add(health);
@@ -42,8 +43,8 @@ public class ArticleSearchServiceTest {
         tags2.add(body);
         tags2.add(science);
 
-        Article article1 = new Article("1", "title1", new Date(),"body1", tags1);
-        Article article2 = new Article("2", "title2", new Date(),"body2", tags2);
+        Article article1 = new Article("1", "title1", new Date(), "body1", tags1);
+        Article article2 = new Article("2", "title2", new Date(), "body2", tags2);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article1);
@@ -51,9 +52,11 @@ public class ArticleSearchServiceTest {
 
         Mockito.when(articleDao.
                 findArticlesByTagsContainsAndDateOrderByCreatedDateDesc(any(), any())).thenReturn(articles);
+        // WHEN
         ArticleTagSearchResult searchResult = articleSearchService.searchArticlesByTagAndDate(
                 "health", new Date());
 
+        // THEN
         assertTrue(searchResult.getArticleIds().contains("1"));
         assertEquals(2, searchResult.getCount());
         assertEquals(2, searchResult.getArticleIds().size());
@@ -70,7 +73,6 @@ public class ArticleSearchServiceTest {
         assertTrue(searchResult.getArticleIds().isEmpty());
 
     }
-
 
 
 }

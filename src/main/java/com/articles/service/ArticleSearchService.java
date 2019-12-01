@@ -25,33 +25,24 @@ public class ArticleSearchService {
     public ArticleTagSearchResult searchArticlesByTagAndDate(String tagName, Date date) {
 
         Tag searchTag = new Tag(tagName);
+
+        // Search articles by Tag and Date, in descending order of created datetime
         List<Article> articles = articleDao.findArticlesByTagsContainsAndDateOrderByCreatedDateDesc(searchTag, date);
+
+        int maxArticlesInResult = Math.min(MAX_RESULT, articles.size());
+        Set<String> articleIds = IntStream.range(0, maxArticlesInResult)
+                .mapToObj(i -> articles.get(i).getId())
+                .collect(Collectors.toSet());
 
         ArticleTagSearchResult searchResult = new ArticleTagSearchResult();
         searchResult.setTag(tagName);
         searchResult.setCount(articles.size());
-
-        int maxResults = MAX_RESULT < articles.size() ? MAX_RESULT: articles.size();
-        Set<String> articleIds = IntStream.range(0, maxResults)
-                .mapToObj(i -> articles.get(i).getId())
-                .collect(Collectors.toSet());
         searchResult.setArticleIds(articleIds);
-
         searchResult.setRelatedTags(getRelatedTags(searchTag, articles));
         return searchResult;
-
     }
 
     private Set<String> getRelatedTags(Tag searchTag, List<Article> articles) {
-/*        Set<String> relatedTags = new HashSet<>();
-        for (Article article : articles) {
-            for (Tag t : article.getTags()) {
-                if (!t.equals(searchTag)) {
-                    relatedTags.add(t.getName());
-                }
-            }
-
-        }*/
 
         return articles.stream()
                 .map(Article::getTags)
@@ -59,7 +50,5 @@ public class ArticleSearchService {
                 .filter(c -> !c.equals(searchTag))
                 .map(Tag::getName)
                 .collect(Collectors.toSet());
-
-
     }
 }
