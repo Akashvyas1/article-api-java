@@ -2,7 +2,6 @@ package com.articles.controller;
 
 import com.articles.dto.ArticleTagSearchResult;
 import com.articles.service.ArticleSearchService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,12 +15,16 @@ import java.util.Date;
 @RequestMapping(path = "/tags")
 public class ArticleTagSearchController {
 
-    @Autowired
-    private ArticleSearchService articleSearchService;
+    private final ArticleSearchService articleSearchService;
+
+    public ArticleTagSearchController(final ArticleSearchService articleSearchService) {
+        this.articleSearchService = articleSearchService;
+    }
 
     @GetMapping(path = "/{tagName}/{date}", produces = "application/json")
-    public ArticleTagSearchResult searchArticlesByTagAndDate(@PathVariable("tagName") String tagName,
-                                                             @PathVariable("date") @DateTimeFormat(pattern = "yyyyMMdd") @Valid Date date) {
+    public ArticleTagSearchResult searchArticlesByTagAndDate(
+            @PathVariable("tagName") final String tagName,
+            @PathVariable("date") @DateTimeFormat(pattern = "yyyyMMdd") @Valid final Date date) {
         return articleSearchService.searchArticlesByTagAndDate(tagName, date);
     }
 

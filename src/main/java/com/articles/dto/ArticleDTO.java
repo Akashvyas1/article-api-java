@@ -1,15 +1,19 @@
 package com.articles.dto;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import java.util.Set;
 
 public class ArticleDTO {
 
     @NotEmpty
+    @Pattern(message = "must be a number", regexp="^[0-9]*$")
     private String id;
+
     @NotEmpty
     private String title;
     @NotEmpty
+    @Pattern(message = "invalid date", regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
     private String date;
     private String body;
     @NotEmpty

@@ -19,19 +19,23 @@ public class ArticleSearchService {
 
     private static final int MAX_RESULT = 10;
 
-    @Autowired
-    private ArticleDao articleDao;
+    private final ArticleDao articleDao;
 
-    public ArticleTagSearchResult searchArticlesByTagAndDate(String tagName, Date date) {
+    public ArticleSearchService(final ArticleDao articleDao) {
+        this.articleDao = articleDao;
+    }
+
+    public ArticleTagSearchResult searchArticlesByTagAndDate(final String tagName, final Date date) {
 
         Tag searchTag = new Tag(tagName);
 
         // Search articles by Tag and Date, in descending order of created datetime
-        List<Article> articles = articleDao.findArticlesByTagsContainsAndDateOrderByCreatedDateDesc(searchTag, date);
+        List<Article> articles = articleDao
+                .findArticlesByTagsContainsAndDateOrderByCreatedDateDesc(searchTag, date);
 
-        int maxArticlesInResult = Math.min(MAX_RESULT, articles.size());
-        Set<String> articleIds = IntStream.range(0, maxArticlesInResult)
-                .mapToObj(i -> articles.get(i).getId())
+        Set<String> articleIds = articles.stream()
+                .limit(MAX_RESULT)
+                .map(Article::getId)
                 .collect(Collectors.toSet());
 
         ArticleTagSearchResult searchResult = new ArticleTagSearchResult();
@@ -42,7 +46,7 @@ public class ArticleSearchService {
         return searchResult;
     }
 
-    private Set<String> getRelatedTags(Tag searchTag, List<Article> articles) {
+    private Set<String> getRelatedTags(final Tag searchTag, final List<Article> articles) {
 
         return articles.stream()
                 .map(Article::getTags)

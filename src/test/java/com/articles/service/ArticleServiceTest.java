@@ -17,8 +17,7 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -43,14 +42,6 @@ public class ArticleServiceTest {
         Mockito.verify(articleDao).save(any());
     }
 
-    @Test(expected = InvalidClientRequestException.class)
-    public void shouldThrowExceptionForInvalidDateFormat() {
-        String[] tags = {"health", "science"};
-        ArticleDTO articleDTO = new ArticleDTO("1", "title", "2019-11", "body",
-                new HashSet<>(Arrays.asList(tags)));
-        articleService.postArticle(articleDTO);
-    }
-
     @Test
     public void shouldGetArticle() {
         // GIVEN (Mocks)
@@ -62,7 +53,8 @@ public class ArticleServiceTest {
         Mockito.when(articleDao.findById("1")).thenReturn(Optional.of(article));
 
         // WHEN
-        ArticleDTO articleDTO = articleService.getArticle("1");
+        Optional<ArticleDTO> articleDTOOptional = articleService.getArticle("1");
+        ArticleDTO articleDTO = articleDTOOptional.get();
 
         // THEN
         assertEquals("title1", articleDTO.getTitle());
@@ -71,8 +63,8 @@ public class ArticleServiceTest {
         assertTrue(articleDTO.getTags().contains("science"));
     }
 
-    @Test(expected = InvalidClientRequestException.class)
-    public void shouldThrowExceptionIfNotFound() {
-        articleService.getArticle("50");
+    @Test
+    public void shouldReturnOptionalEmptyIfNotFound() {
+        assertEquals(Optional.empty(), articleService.getArticle("50"));
     }
 }

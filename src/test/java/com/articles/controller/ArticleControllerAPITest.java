@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -28,8 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = ArticlesAPIApplication.class)
+@ActiveProfiles("h2")
 @AutoConfigureMockMvc
-public class ArticleControllerTest {
+public class ArticleControllerAPITest {
 
     @Autowired
     private MockMvc mvc;
@@ -74,6 +76,37 @@ public class ArticleControllerTest {
     }
 
     @Test
+    public void testPostArticle_shouldReturnBadRequestStatusForInvalidDate() throws Exception {
+
+        String jsonArticle = "{\n" +
+                "  \"id\": \"1\",\n" +
+                "  \"title\": \"latest science shows that potato chips are better for you than sugar\",\n" +
+                "  \"date\" : \"2016-25-22\",\n" +
+                "  \"body\" : \"some text, potentially containing simple markup about how potato chips are great\",\n" +
+                "  \"tags\" : [\"health\", \"fitness\", \"science\"]\n" +
+                "}";
+
+        mvc.perform(post("/articles").content(jsonArticle).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    public void testPostArticle_shouldReturnBadRequestForInvalidId() throws Exception {
+
+        String jsonArticle = "{\n" +
+                "  \"id\": \"article-1\",\n" +
+                "  \"title\": \"latest science shows that potato chips are better for you than sugar\",\n" +
+                "  \"body\" : \"some text, potentially containing simple markup about how potato chips are great\",\n" +
+                "  \"tags\" : [\"health\", \"fitness\", \"science\"]\n" +
+                "}";
+
+        mvc.perform(post("/articles").content(jsonArticle).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
     public void testGetArticle() throws Exception {
         Set<Tag> tags = new HashSet<>();
         tags.add(new Tag("health"));
@@ -91,6 +124,14 @@ public class ArticleControllerTest {
 
         mvc.perform(get("/articles/100"))
                 .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    public void testGetArticleInvalidId_shouldReturnBadRequest() throws Exception {
+
+        mvc.perform(get("/articles/article-1"))
+                .andExpect(status().isBadRequest());
 
     }
 }

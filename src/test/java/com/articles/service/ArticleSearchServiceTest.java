@@ -13,8 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -61,7 +60,7 @@ public class ArticleSearchServiceTest {
         assertEquals(2, searchResult.getCount());
         assertEquals(2, searchResult.getArticleIds().size());
         assertEquals(3, searchResult.getRelatedTags().size());
-        assertTrue(!searchResult.getRelatedTags().contains("health"));
+        assertFalse(searchResult.getRelatedTags().contains("health"));
 
     }
 

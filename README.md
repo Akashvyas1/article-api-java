@@ -12,6 +12,7 @@ The final endpoint, GET /tags/{tagName}/{date} will return the list of articles 
 
 An article has the following attributes id, title, date, body, and list of tags. for example:
 
+````
 {
   "id": "1",
   "title": "latest science shows that potato chips are better for you than sugar",
@@ -19,9 +20,11 @@ An article has the following attributes id, title, date, body, and list of tags.
   "body" : "some text, potentially containing simple markup about how potato chips are great",
   "tags" : ["health", "fitness", "science"]
 }
+````
 
 The GET /tag/{tagName}/{date} endpoint should produce the following JSON. Note that the actual url would look like /tags/health/20160922.
 
+````
 {
   "tag" : "health",
   "count" : 17,
@@ -36,7 +39,7 @@ The GET /tag/{tagName}/{date} endpoint should produce the following JSON. Note t
         "fitness"
       ]
 }
-
+````
 
 The related_tags field contains a list of tags that are on the articles that the current tag is on for the same day. It should not contain duplicates.
 
@@ -71,7 +74,10 @@ While using postgresql is recommended, if you don't have postgresql installed on
 - Alternately, you can import the project as a maven project in an IDE and run it there.
 - By default, the application would start running on port 8080, which you can change in application.properties.
 - Verify the app is running by invoking healthcheck api at http://localhost:8080/articles/_health
-- Now, you can invoke post  & get article endpoints along with tag & date based search as described in the requirements.
+- Swagger API Docs are enabled, you can visit the swagger UI at http://localhost:8080/swagger-ui.html
+- Now, you can invoke POST & GET article endpoints along with tag & date based search. Sample payloads as described in the requirements.
+- Use swagger UI or any client/tool of your choice to manually test the APIs. 
+- Automated tests are also available with the code. Run them with 'mvn test' OR your on your IDE. 
 
 ## Assumptions & Solution Notes
 
